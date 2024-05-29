@@ -198,7 +198,7 @@ function HomePage() {
                 </ul>
               </div>
               <button
-                className=" text-white rounded-md p-4 bg-[#006d6a] hover:bg-[#0a5a62] ease-in-out duration-300 transform hover:scale-95 hover:shadow-lg hover:cursor-pointer"
+                className=" text-white font-semibold text-xl rounded-md p-4 bg-[#006d6a] hover:bg-[#0a5a62] ease-in-out duration-300 transform hover:scale-95 hover:shadow-lg hover:cursor-pointer"
                 type="submit"
               >
                 Start Quiz
