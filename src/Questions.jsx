@@ -1,9 +1,10 @@
 import { TailSpin } from "react-loader-spinner";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
 import toast from "react-hot-toast";
+import QuizContext from "./QuizContext";
 
 // Function to decode HTML entities
 function decodeHtml(html) {
@@ -14,45 +15,50 @@ function decodeHtml(html) {
 
 function Questions() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { numQuestions, difficulty, category, type } = location.state;
 
-  const [questions, setQuestions] = useState([]);
+  //const [questions, setQuestions] = useState([]);
   const [responseCode, setResponse] = useState();
-  const [userChoices, setUserChoices] = useState({}); // State for user choices
+  const { questions, setQuestions, userChoices, setUserChoices } =
+    useContext(QuizContext);
+  //const [userChoices, setUserChoices] = useState({}); // State for user choices
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0); // State for current question index
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    fetchQuestions(numQuestions, difficulty, category, type);
-  }, [numQuestions, difficulty, category, type]);
+    const fetchQuestions = async (numQuestions, difficulty, category, type) => {
+      const params = {
+        amount: numQuestions,
+        ...(difficulty !== "any" && { difficulty }),
+        ...(category !== "any" && { category }),
+        ...(type !== "any" && { type }),
+      };
 
-  const fetchQuestions = async (numQuestions, difficulty, category, type) => {
-    const params = {
-      amount: numQuestions,
-      ...(difficulty !== "any" && { difficulty }),
-      ...(category !== "any" && { category }),
-      ...(type !== "any" && { type }),
+      await axios
+        .get(`https://opentdb.com/api.php`, { params })
+        .then((response) => {
+          // Decode HTML entities in questions and answers
+          const decodedQuestions = response.data.results.map((question) => ({
+            ...question,
+            question: decodeHtml(question.question),
+            correct_answer: decodeHtml(question.correct_answer),
+            incorrect_answers: question.incorrect_answers.map((answer) =>
+              decodeHtml(answer)
+            ),
+            category: decodeHtml(question.category),
+          }));
+          console.log(response.data);
+          setQuestions(decodedQuestions);
+          setResponse(response.data.response_code);
+        })
+        .catch((error) => {
+          console.error("Error fetching questions:", error);
+        });
     };
 
-    await axios
-      .get(`https://opentdb.com/api.php`, { params })
-      .then((response) => {
-        // Decode HTML entities in questions and answers
-        const decodedQuestions = response.data.results.map((question) => ({
-          ...question,
-          question: decodeHtml(question.question),
-          correct_answer: decodeHtml(question.correct_answer),
-          incorrect_answers: question.incorrect_answers.map((answer) =>
-            decodeHtml(answer)
-          ),
-          category: decodeHtml(question.category),
-        }));
-        setQuestions(decodedQuestions);
-        setResponse(response.data.response_code);
-      })
-      .catch((error) => {
-        console.error("Error fetching questions:", error);
-      });
-  };
+    fetchQuestions(numQuestions, difficulty, category, type);
+  }, [numQuestions, difficulty, category, type, setQuestions]);
 
   const handleOptionChange = (questionIndex, answer) => {
     setUserChoices((prevChoices) => ({
@@ -74,6 +80,7 @@ function Questions() {
   const handleSubmit = () => {
     // Handle form submission and user choices
     console.log("User Choices:", userChoices);
+    navigate("/results");
   };
 
   const handleNextQuestion = () => {
@@ -84,18 +91,19 @@ function Questions() {
       }
     } else {
       // Optionally, you can provide feedback to the user indicating that they need to select an answer.
-      toast.error("Choose an answer before proceeding.", {
+      toast("Choose an answer before proceeding.", {
+        icon: "⚠️",
         style: {
           border: "1px solid #e79209",
           color: "#e79209",
         },
+
         iconTheme: {
           primary: "#e79209",
           secondary: "#FFFAEE",
         },
         duration: 3000,
       });
-      
     }
   };
 
@@ -182,9 +190,9 @@ function Questions() {
                 colors={["#00403d", "#F7B801", "#A30000", "#A30000"]}
                 colorsTime={[7, 5, 2, 0]}
                 size={70}
-                
+
                 //onComplete={() => {
-                  //console.log("complete");
+                //console.log("complete");
                 //}}
               >
                 {({ remainingTime }) => remainingTime}
@@ -192,7 +200,7 @@ function Questions() {
             </div>
           </div>
           <div className="flex flex-col justify-start items-center p-4 pt-8 md:p-8 w-full h-4/5">
-            <h1 className="text-md sm:text-2xl md:text-2xl font-bold text-[#00403d] text-center">
+            <h1 className="text-md sm:text-2xl md:text-2xl pt-8 font-bold text-[#00403d] text-center">
               {questions[currentQuestionIndex].question}
             </h1>
             <form
@@ -202,14 +210,14 @@ function Questions() {
               {questions[currentQuestionIndex].type === "boolean" ? (
                 <>
                   <div
-                    className={`flex flex-row w-full px-6 h-14 rounded-md hover:cursor-pointer hover:bg-green-200 ${
+                    className={`flex flex-row w-full px-6 h-14 rounded-md ease-in-out duration-300 hover:cursor-pointer hover:bg-green-200 ${
                       userChoices[currentQuestionIndex] === "True"
                         ? "bg-green-200 border-2 border-green-400"
                         : "bg-gray-200"
                     }`}
                   >
                     <input
-                      className="flex justify-start items-start hover:cursor-pointer"
+                      className="hidden justify-start items-start hover:cursor-pointer"
                       type="radio"
                       id={`true-${currentQuestionIndex}`}
                       name={`answer-${currentQuestionIndex}`}
@@ -221,7 +229,7 @@ function Questions() {
                       required
                     />
                     <label
-                      className="flex justify-center items-center w-full ease-in-out duration-300 hover:cursor-pointer text-[#00403d] font-semibold"
+                      className="flex justify-center items-center w-full hover:cursor-pointer text-[#00403d] font-semibold"
                       htmlFor={`true-${currentQuestionIndex}`}
                     >
                       True
@@ -235,7 +243,7 @@ function Questions() {
                     }`}
                   >
                     <input
-                      className="flex justify-start items-start hover:cursor-pointer"
+                      className="hidden justify-start items-start hover:cursor-pointer"
                       type="radio"
                       id={`false-${currentQuestionIndex}`}
                       name={`answer-${currentQuestionIndex}`}
