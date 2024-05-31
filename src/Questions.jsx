@@ -1,8 +1,9 @@
 import { TailSpin } from "react-loader-spinner";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState, useContext } from "react";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
+
 import toast from "react-hot-toast";
 import QuizContext from "./QuizContext";
 
@@ -14,19 +15,37 @@ function decodeHtml(html) {
 }
 
 function Questions() {
-  const location = useLocation();
+  
   const navigate = useNavigate();
-  const { numQuestions, difficulty, category, type } = location.state;
 
   //const [questions, setQuestions] = useState([]);
   const [responseCode, setResponse] = useState();
-  const { questions, setQuestions, userChoices, setUserChoices } =
-    useContext(QuizContext);
+  const {
+    questions,
+    setQuestions,
+    userChoices,
+    setUserChoices,
+    numQuestions,
+    difficulty,
+    category,
+    type,
+  } = useContext(QuizContext);
   //const [userChoices, setUserChoices] = useState({}); // State for user choices
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0); // State for current question index
 
+  window.onpopstate = () => {
+    navigate("/results");
+  };
+
+
+
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
+    if (!numQuestions || !difficulty || !category || !type) {
+      navigate("/");
+      return;
+    }
     const fetchQuestions = async (numQuestions, difficulty, category, type) => {
       const params = {
         amount: numQuestions,
@@ -58,7 +77,7 @@ function Questions() {
     };
 
     fetchQuestions(numQuestions, difficulty, category, type);
-  }, [numQuestions, difficulty, category, type, setQuestions]);
+  }, [numQuestions, difficulty, category, type, setQuestions, navigate]);
 
   const handleOptionChange = (questionIndex, answer) => {
     setUserChoices((prevChoices) => ({

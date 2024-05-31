@@ -6,10 +6,14 @@ const QuizContext = createContext();
 export const QuizProvider = ({ children }) => {
   const [questions, setQuestions] = useState([]);
   const [userChoices, setUserChoices] = useState({});
+  const [numQuestions, setNumQuestions] = useState(10);
+  const [difficulty, setDifficulty] = useState("");
+  const [category, setCategory] = useState("");
+  const [type, setType] = useState("");
 
   return (
     <QuizContext.Provider
-      value={{ questions, setQuestions, userChoices, setUserChoices }}
+      value={{ questions, setQuestions, userChoices, setUserChoices, numQuestions, setNumQuestions, difficulty, setDifficulty, category, setCategory, type, setType }}
     >
       {children}
     </QuizContext.Provider>

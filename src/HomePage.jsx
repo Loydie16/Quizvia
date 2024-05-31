@@ -1,25 +1,26 @@
 import { FaFacebook, FaFacebookMessenger, FaGithub } from "react-icons/fa6";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import QuizContext from "./QuizContext";
 
 function HomePage() {
-  const [value, setValue] = useState("");
-  const [numQuestions, setNumQuestions] = useState(10);
-  const [difficulty, setDifficulty] = useState(""); 
-  const [category, setCategory] = useState(""); 
-  const [type, setType] = useState(""); 
+  const [name, setName] = useState("");
+  const { numQuestions, setNumQuestions, difficulty, setDifficulty, category, setCategory, type, setType } =
+    useContext(QuizContext);
   const navigate = useNavigate();
 
+
+
   useEffect(() => {
-    const storedValue = localStorage.getItem("name");
-    if (storedValue) {
-      setValue(storedValue);
+    const storedName = localStorage.getItem("name");
+    if (storedName) {
+      setName(storedName);
     }
   }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault(); // Prevent the default form submission
-    localStorage.setItem("name", value);
+    localStorage.setItem("name", name);
     navigate("/questions", {
       state: {
         numQuestions,
@@ -29,6 +30,8 @@ function HomePage() {
       },
     }); // Navigate to the questions page with state
   };
+
+    
 
   return (
     <>
@@ -74,36 +77,36 @@ function HomePage() {
           </div>
         </div>
 
-        <div className="flex flex-col justify-center size-full bg-[#00403d] p-5 md:p-20">
+        <div className="flex flex-col justify-center size-full bg-[#00403d] p-5  md:p-20">
           <form onSubmit={handleSubmit}>
             <div className="flex flex-col gap-8 xs:gap-4 place-content-center">
-              <span className="font-bold 2xl:text-6xl md:text-4xl text-4xl text-custom-gray">
+              <span className="font-bold 2xl:text-6xl md:text-4xl text-3xl text-custom-gray">
                 Welcome to Quizvia
               </span>
               <div className="flex flex-col gap-2">
-                <span className="text-lg text-custom-gray font-semibold ">
+                <span className="text-md lg:text-xl text-custom-gray font-semibold ">
                   What should we call you?
                 </span>
                 <input
-                  className="border-2 border-white  rounded-md p-2 text-white bg-transparent outline-none "
-                  value={value}
-                  onChange={(e) => setValue(e.target.value)}
+                  className="border-2 border-white  rounded-md p-1 md:p-2 text-white bg-transparent outline-none font-thin "
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
                   type="text"
                   placeholder="Enter your nickname"
+                  maxLength={8}
                   required
-                  
                 />
               </div>
 
               <div className="flex flex-col gap-4">
-                <span className="font-bold text-2xl text-custom-gray">
+                <span className="font-bold text-xl lg:text-2xl text-custom-gray">
                   Quiz Settings:
                 </span>
-                <span className="text-md text-custom-gray">
+                <span className="text-sm md:text-lg text-custom-gray">
                   Number of Questions:
                 </span>
                 <input
-                  className="border border-slate-400 bg-white rounded-md p-2  text-black "
+                  className="border border-slate-400 bg-white rounded-md p-1 md:p-2 text-black "
                   type="number"
                   placeholder="Enter the number of questions"
                   max={50}
@@ -113,9 +116,11 @@ function HomePage() {
                   onChange={(e) => setNumQuestions(e.target.value)}
                 />
 
-                <span className="text-md text-custom-gray">Difficulty:</span>
+                <span className="text-sm md:text-lg text-custom-gray">
+                  Difficulty:
+                </span>
                 <select
-                  className="border border-slate-400 bg-white rounded-md p-2 text-black hover:cursor-pointer"
+                  className="border border-slate-400 bg-white rounded-md p-1 md:p-2 text-black hover:cursor-pointer"
                   required
                   value={difficulty}
                   onChange={(e) => setDifficulty(e.target.value)}
@@ -129,14 +134,16 @@ function HomePage() {
                   <option value="hard">Hard</option>
                 </select>
 
-                <span className="text-md text-custom-gray">Category:</span>
+                <span className="text-sm md:text-lg text-custom-gray">
+                  Category:
+                </span>
                 <select
-                  className="border border-slate-400 bg-white rounded-md p-2 text-black hover:cursor-pointer"
+                  className="border border-slate-400 bg-white rounded-md p-1 md:p-2 text-black hover:cursor-pointer"
                   required
                   value={category}
                   onChange={(e) => setCategory(e.target.value)}
                 >
-                  <option value="" disabled  hidden>
+                  <option value="" disabled hidden>
                     Select Category
                   </option>
                   <option value="any">Any Category</option>
@@ -166,16 +173,16 @@ function HomePage() {
                   <option value="32">Cartoon & Animations</option>
                 </select>
 
-                <span className="text-md text-custom-gray">
+                <span className="text-sm md:text-lg text-custom-gray">
                   Type of Questions:
                 </span>
                 <select
-                  className="border border-slate-400 bg-white rounded-md p-2 text-black hover:cursor-pointer"
+                  className="border border-slate-400 bg-white rounded-md p-1 md:p-2 text-black hover:cursor-pointer"
                   required
                   value={type}
                   onChange={(e) => setType(e.target.value)}
                 >
-                  <option value="" disabled  hidden>
+                  <option value="" disabled hidden>
                     Select Type of Questions
                   </option>
                   <option value="any">Any Type</option>
