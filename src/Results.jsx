@@ -1,19 +1,24 @@
 import { useContext, useEffect, useState } from "react";
 import QuizContext from "./QuizContext";
 import { FaFacebook, FaFacebookMessenger, FaGithub } from "react-icons/fa6";
-
-
+import Modal from "react-modal";
 
 function Results() {
   const { questions, userChoices, numQuestions, difficulty, category, type } =
     useContext(QuizContext);
   const [name, setName] = useState("");
 
-
   /* window.onpopstate = () => {
     navigate("/");
   }; */
-  
+
+  useEffect(() => {
+    const storedName = localStorage.getItem("name");
+    if (storedName) {
+      setName(storedName);
+    }
+  }, []);
+
   // Calculate the user's score
   const score = Object.keys(userChoices).reduce((score, key) => {
     const question = questions[key];
@@ -22,6 +27,38 @@ function Results() {
     }
     return score;
   }, 0);
+
+  const customStyles = {
+    content: {
+      top: "50%",
+      left: "50%",
+      right: "auto",
+      bottom: "auto",
+      marginRight: "-50%",
+      transform: "translate(-50%, -50%)",
+      width: "90%",
+      height: "90%",
+      radius: "60px",
+    },
+    overlay: {
+      position: "fixed",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: "rgba(255, 255, 255, 0.30)",
+    },
+  };
+
+  const [modalIsOpen, setOpenModal] = useState();
+
+  const openModal = () => {
+    setOpenModal(true);
+  };
+
+  const closeModal = () => {
+    setOpenModal(false);
+  };
 
   const categoryNames = {
     9: "General Knowledge",
@@ -55,15 +92,28 @@ function Results() {
   const passingPercentage = 70;
   const scorePercentage = (score / questions.length) * 100;
 
-  useEffect(() => {
-    const storedName = localStorage.getItem("name");
-    if (storedName) {
-      setName(storedName);
+  const getOptionBgColor = (option, correctAnswer, userChoice) => {
+    if (option === correctAnswer) {
+      return "bg-green-200";
     }
-  }, []);
+    if (option === userChoice) {
+      return "bg-red-200";
+    }
+    return "bg-gray-200";
+  };
+
+  const getOptionLabel = (option, correctAnswer, userChoice) => {
+    if (option === correctAnswer) {
+      return "Correct Answer";
+    }
+    if (option === userChoice) {
+      return "Your answer";
+    }
+    return "";
+  };
 
   return (
-    <main className="flex flex-col bg-[#00403d] w-full min-h-screen font-poppins items-center">
+    <main className="flex flex-col bg-[#00403d] w-full min-h-screen items-center">
       {/* <h1>
         Your Score: {score} / {questions.length}
       </h1>
@@ -92,10 +142,15 @@ function Results() {
           <span className="text-6xl md:text-7xl font-bold text-[#ff9209]">
             {score}/{questions.length}
           </span>
+          <span className="text-xl md:text-3xl font-bold text-custom-gray text-center px-4 lg:pt-10 pt-4 ">
+            {scorePercentage >= passingPercentage
+              ? "Congratulations! You reached the passing score.  🎉👏🥳🎉"
+              : "You did not reach the passing score. Better luck next time! 🥚😔"}
+          </span>
         </div>
-        <div className="flex flex-col items-center gap-2 w-full">
+        <div className="flex flex-col items-center gap-2 w-full lg:pt-14">
           <span className="flex justify-center w-full text-LG md:text-2xl font-bold text-custom-gray">
-            Quiz Settings:
+            Your Quiz Settings:
           </span>
           <div className="flex flex-col w-full text-sm lg:text-md lg:flex-row lg:flex-wrap gap-2 lg:justify-center px-8 md:px-32 text-center">
             <div className="w-full lg:w-[45%] bg-[#0a5a62] rounded-lg p-3">
@@ -125,29 +180,132 @@ function Results() {
               </span>
             </div>
           </div>
-          <span className="text-xl md:text-3xl font-bold text-custom-gray text-center p-6 pt-8 ">
-            {scorePercentage >= passingPercentage
-              ? "Congratulations! You reached the passing score.  🎉👏🥳🎉"
-              : "You did not reach the passing score. Better luck next time! 🥚😔"}
-          </span>
 
-          <div className="flex flex-col md:flex-row items-center gap-4 w-full md:pt-2 lg:pt-20 px-8 justify-center">
+          <div className="flex flex-col md:flex-row items-center gap-4 w-full md:pt-8 lg:pt-20 pt-10 px-8 justify-center">
             <button
-              className="bg-[#ffd099] md:w-[30%] w-full text-[#00403d] rounded-md p-2 md:p-2 font-bold text-lg md:text-xl"
+              className="bg-[#ffd099] md:w-[30%] w-full text-[#00403d] rounded-md p-2 md:p-2 font-bold text-lg md:text-xl hover:bg-[#e79209] ease-in-out duration-300"
               onClick={() => {
-                
+                openModal();
               }}
             >
               Review Answers
             </button>
             <button
-              className="bg-[#ffd099] md:w-[30%] w-full text-[#00403d] rounded-md p-2 md:p-2 font-bold text-lg md:text-xl"
+              className="bg-[#ffd099] md:w-[30%] w-full text-[#00403d] rounded-md p-2 md:p-2 font-bold text-lg md:text-xl hover:bg-[#e79209] ease-in-out duration-300"
               onClick={() => {
                 window.location.href = "/";
               }}
             >
               Play Again
             </button>
+
+            <Modal
+              isOpen={modalIsOpen}
+              style={customStyles}
+              ariaHideApp={false}
+              onRequestClose={closeModal}
+            >
+              <div className="flex absolute lg:ml-10 ">
+                <h1 className="text-xl md:text-4xl font-bold text-[#0a5a62]">
+                  Review Your Answers
+                </h1>
+              </div>
+              <div className="flex sticky top-0 items-end justify-end mb-4 md:mb-8">
+                <button
+                  className="p-1 px-3 rounded-lg text-xl text-white font-semibold bg-red-400"
+                  onClick={closeModal}
+                >
+                  X
+                </button>
+              </div>
+              <div className="flex flex-col items-center gap-6 lg:mx-10 lg:my-4   ">
+                {questions.map((question, index) => (
+                  <div
+                    key={index}
+                    className="question-result flex flex-col bg-gray-100 gap-4 rounded-lg p-4 w-full"
+                  >
+                    <div className="flex flex-col md:flex-row gap-2 md:gap-10">
+                      <h1 className="font-bold text-[#00403d] md:text-lg text-sm">
+                        Difficulty:{" "}
+                        <span className="text-[#e79209]">
+                          {questions[index].difficulty.charAt(0).toUpperCase() +
+                            questions[index].difficulty.slice(1)}
+                        </span>
+                      </h1>
+                      <h1 className="font-bold text-[#00403d] md:text-lg text-sm">
+                        Category:{" "}
+                        <span className="text-[#e79209]">
+                          {questions[index].category}
+                        </span>
+                      </h1>
+                    </div>
+                    <h2 className="text-xl font-bold md:mt-4 text-[#00403d]">
+                      {question.question}
+                    </h2>
+                    {questions[index].type === "boolean"
+                      ? questions[index].incorrect_answers
+                          .concat(questions[index].correct_answer)
+                          .sort((a, b) =>
+                            a === "True" ? -1 : b === "False" ? 1 : 0
+                          ) // Custom sort for boolean questions
+                          .map((option, i) => (
+                            <div
+                              key={i}
+                              className={`flex md:flex-row w-full p-3 gap-2 flex-col justify-between rounded-md ${getOptionBgColor(
+                                option,
+                                questions[index].correct_answer,
+                                userChoices[index]
+                              )}`}
+                            >
+                              <span className="lg:text-md text-sm font-semibold text-[#00403d]">
+                                {option}
+                              </span>
+                              <span className="flex lg:text-md text-sm font-light md:justify-end md:items-end">
+                                {getOptionLabel(
+                                  option,
+                                  questions[index].correct_answer,
+                                  userChoices[index]
+                                )}
+                              </span>
+                            </div>
+                          ))
+                      : questions[index].incorrect_answers
+                          .concat(questions[index].correct_answer)
+                          .sort() 
+                          .map((option, i) => (
+                            <div
+                              key={i}
+                              className={`flex md:flex-row w-full p-3 gap-2 flex-col justify-between rounded-md ${getOptionBgColor(
+                                option,
+                                questions[index].correct_answer,
+                                userChoices[index]
+                              )}`}
+                            >
+                              <span className="lg:text-md text-sm font-semibold text-[#00403d]">
+                                {option}
+                              </span>
+                              <span className="flex lg:text-md text-sm font-light md:justify-end md:items-end">
+                                {getOptionLabel(
+                                  option,
+                                  questions[index].correct_answer,
+                                  userChoices[index]
+                                )}
+                              </span>
+                            </div>
+                          ))}
+                    {userChoices[index] === question.correct_answer ? (
+                      <p className="font-normal text-green-600">
+                        You got it right! 🎉
+                      </p>
+                    ) : (
+                      <p className="font-normal text-red-600">
+                        You got it wrong! 😔
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </Modal>
           </div>
         </div>
       </div>

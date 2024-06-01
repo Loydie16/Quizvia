@@ -92,7 +92,7 @@ function HomePage() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   type="text"
-                  placeholder="Enter your nickname"
+                  placeholder="Enter your nickname (Maximum of 8 characters.)"
                   maxLength={8}
                   required
                 />
@@ -193,14 +193,14 @@ function HomePage() {
 
               <div>
                 <ul className="list-disc list-outside pl-4">
-                  <li className="text-md text-custom-gray xs:text-sm">
-                    You can only select up to 50 questions at a time.
+                  <li className="text-md text-custom-gray xs:text-sm ">
+                    You can only select 5 up to 50 questions at a time.
                   </li>
                   <li className="text-md text-custom-gray xs:text-sm">
-                    You can only select up to 50 questions at a time.
+                    Passing score rate is 60% of the number of questions.
                   </li>
                   <li className="text-md text-custom-gray xs:text-sm">
-                    You can only select up to 50 questions at a time.
+                    The timer is added 15 seconds per question.
                   </li>
                 </ul>
               </div>
