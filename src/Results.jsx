@@ -2,24 +2,54 @@ import { useContext, useEffect, useState } from "react";
 import QuizContext from "./QuizContext";
 import { FaFacebook, FaFacebookMessenger, FaGithub } from "react-icons/fa6";
 import Modal from "react-modal";
+import { useNavigate } from "react-router-dom";
+import Confetti from "react-confetti";
+import { FacebookIcon, FacebookShareButton, XIcon, TwitterShareButton} from "react-share";
+
+
 
 function Results() {
   const { questions, userChoices, numQuestions, difficulty, category, type } =
     useContext(QuizContext);
   const [name, setName] = useState("");
+  const navigate = useNavigate();
+
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [modalIsOpen, setOpenModal] = useState();
+  const shareUrl = "tailwindcss.com";
+  const description = () => {
+    if (scorePercentage >= passingPercentage) {
+      return (
+        "I got a score of " +
+        score +
+        " out of " +
+        questions.length +
+        " on Quizvia! I passed! Try it out!"
+      );
+    } else {
+      return (
+        "I got a score of " +
+        score +
+        " out of " +
+        questions.length +
+        " on Quizvia! Even though I didn't pass, I had fun! Try it out!"
+      );
+    }
+  };
+
+
+  const openModal = () => {
+    setOpenModal(true);
+  };
+
+  const closeModal = () => {
+    setOpenModal(false);
+  };
 
   /* window.onpopstate = () => {
     navigate("/");
   }; */
 
-  useEffect(() => {
-    const storedName = localStorage.getItem("name");
-    if (storedName) {
-      setName(storedName);
-    }
-  }, []);
-
-  // Calculate the user's score
   const score = Object.keys(userChoices).reduce((score, key) => {
     const question = questions[key];
     if (question.correct_answer === userChoices[key]) {
@@ -28,6 +58,37 @@ function Results() {
     return score;
   }, 0);
 
+
+  // Calculate passing percentage
+  const passingPercentage = 60;
+  const scorePercentage = (score / questions.length) * 100;
+
+  useEffect(() => {
+    const storedName = localStorage.getItem("name");
+    if (storedName) {
+      setName(storedName);
+    }
+
+    if (scorePercentage >= passingPercentage) {
+      setShowConfetti(true);
+    }
+
+    if (!numQuestions || !difficulty || !category || !type) {
+      navigate("/");
+      return;
+    }
+  }, [
+    category,
+    difficulty,
+    name,
+    navigate,
+    numQuestions,
+    type,
+    scorePercentage,
+  ]);
+
+  // Calculate the user's score
+  
   const customStyles = {
     content: {
       top: "50%",
@@ -50,15 +111,7 @@ function Results() {
     },
   };
 
-  const [modalIsOpen, setOpenModal] = useState();
-
-  const openModal = () => {
-    setOpenModal(true);
-  };
-
-  const closeModal = () => {
-    setOpenModal(false);
-  };
+  
 
   const categoryNames = {
     9: "General Knowledge",
@@ -88,10 +141,6 @@ function Results() {
     any: "Any Category",
   };
 
-  // Calculate passing percentage
-  const passingPercentage = 70;
-  const scorePercentage = (score / questions.length) * 100;
-
   const getOptionBgColor = (option, correctAnswer, userChoice) => {
     if (option === correctAnswer) {
       return "bg-green-200";
@@ -112,8 +161,18 @@ function Results() {
     return "";
   };
 
+
+
   return (
     <main className="flex flex-col bg-[#00403d] w-full min-h-screen items-center">
+      {showConfetti && (
+        <Confetti
+          className="w-full h-full"
+          recycle={false}
+          numberOfPieces={2500}
+          tweenDuration={10000}
+        />
+      )}
       {/* <h1>
         Your Score: {score} / {questions.length}
       </h1>
@@ -181,7 +240,7 @@ function Results() {
             </div>
           </div>
 
-          <div className="flex flex-col md:flex-row items-center gap-4 w-full md:pt-8 lg:pt-20 pt-10 px-8 justify-center">
+          <div className="flex flex-col md:flex-row items-center gap-2 w-full md:pt-6 lg:pt-14 pt-2 px-8 justify-center">
             <button
               className="bg-[#ffd099] md:w-[30%] w-full text-[#00403d] rounded-md p-2 md:p-2 font-bold text-lg md:text-xl hover:bg-[#e79209] ease-in-out duration-300"
               onClick={() => {
@@ -212,7 +271,7 @@ function Results() {
               </div>
               <div className="flex sticky top-0 items-end justify-end mb-4 md:mb-8">
                 <button
-                  className="p-1 px-3 rounded-lg text-xl text-white font-semibold bg-red-400"
+                  className="p-1 px-3 rounded-lg text-xl text-white font-semibold bg-red-400 hover:bg-red-600 ease-in-out duration-300"
                   onClick={closeModal}
                 >
                   X
@@ -271,7 +330,7 @@ function Results() {
                           ))
                       : questions[index].incorrect_answers
                           .concat(questions[index].correct_answer)
-                          .sort() 
+                          .sort()
                           .map((option, i) => (
                             <div
                               key={i}
@@ -307,30 +366,44 @@ function Results() {
               </div>
             </Modal>
           </div>
+
+          <div className="flex flex-col items-center gap-2 w-full lg:pt-6 md:pt-0 sm:pt-4 xs:pt-1">
+            <h1 className="text-md md:text-xl text-custom-gray font-semibold">
+              Share:
+            </h1>
+            <div className="flex flex-row gap-4">
+              <FacebookShareButton url={shareUrl} hashtag={description()}>
+                <FacebookIcon className="rounded-md" size={36} round={false} />
+              </FacebookShareButton>
+              <TwitterShareButton url={shareUrl} title={description()} hashtags={["Quizvia"]}>
+                <XIcon size={36} className="rounded-md" round={false} />
+              </TwitterShareButton>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div className="fixed bottom-0 w-full h-1/6 bg-[#0a5a62] ">
+      <div className="fixed bottom-0 w-full h-[14%] md:h-1/6 bg-[#0a5a62] ">
         <div className="flex items-center flex-col md:flex-row  justify-between w-full h-full p-3 md:px-20">
           <div className="flex flex-col items-center justify-center gap-2">
-            <span className="text-xl font-bold text-custom-gray">
+            <span className="text-md md:text-xl font-bold text-custom-gray">
               Follow me: @jltdev
             </span>
             <div className="flex flex-row gap-4">
               <a href="">
-                <FaFacebook className="size-8 text-custom-gray" />
+                <FaFacebook className="md:size-8 size-6 text-custom-gray" />
               </a>
               <a href="">
-                <FaFacebookMessenger className="size-8 text-custom-gray" />
+                <FaFacebookMessenger className="md:size-8 size-6 text-custom-gray" />
               </a>
               <a href="">
-                <FaGithub className="size-8 text-custom-gray" />
+                <FaGithub className="md:size-8 size-6 text-custom-gray" />
               </a>
             </div>
           </div>
 
           <div className="flex flex-col items-center justify-center text-center">
-            <span className="font-semibold text-md md:text-lg text-custom-gray">
+            <span className="font-semibold text-sm md:text-lg text-custom-gray">
               © 2024 Quizvia. All Rights Reserved.
             </span>
           </div>

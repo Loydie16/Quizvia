@@ -79,7 +79,7 @@ function HomePage() {
 
         <div className="flex flex-col justify-center size-full bg-[#00403d] p-5  md:p-20">
           <form onSubmit={handleSubmit}>
-            <div className="flex flex-col gap-8 xs:gap-4 place-content-center">
+            <div className="flex flex-col gap-4 md:gap-6 lg:gap-8 place-content-center">
               <span className="font-bold 2xl:text-6xl md:text-4xl text-3xl text-custom-gray">
                 Welcome to Quizvia
               </span>
@@ -106,9 +106,9 @@ function HomePage() {
                   Number of Questions:
                 </span>
                 <input
-                  className="border border-slate-400 bg-white rounded-md p-1 md:p-2 text-black "
+                  className="border border-slate-400 bg-white rounded-md p-1 px-2 md:p-2 text-black "
                   type="number"
-                  placeholder="Enter the number of questions"
+                  placeholder="Enter the number of questions. (5-50)"
                   max={50}
                   min={5}
                   required
@@ -205,7 +205,7 @@ function HomePage() {
                 </ul>
               </div>
               <button
-                className=" text-white font-semibold text-xl rounded-md p-4 bg-[#006d6a] hover:bg-[#0a5a62] ease-in-out duration-300 transform hover:scale-95 hover:shadow-lg hover:cursor-pointer"
+                className=" text-white font-semibold text-xl rounded-md p-3 bg-[#006d6a] hover:bg-[#0a5a62] ease-in-out duration-300 transform hover:scale-95 hover:shadow-lg hover:cursor-pointer"
                 type="submit"
               >
                 Start Quiz

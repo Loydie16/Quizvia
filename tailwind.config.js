@@ -12,7 +12,7 @@ export default {
         "custom-dark": "#987d59",
       },
       screens: {
-        xs: { max: "400px" },
+        xs: { max: "350px" },
       },
     },
   },
