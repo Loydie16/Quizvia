@@ -1,10 +1,12 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, createRef } from "react";
 import QuizContext from "./QuizContext";
-import { FaFacebook, FaFacebookMessenger, FaGithub } from "react-icons/fa6";
+import { FaFacebook, FaLinkedin, FaGithub } from "react-icons/fa6";
 import Modal from "react-modal";
 import { useNavigate } from "react-router-dom";
 import Confetti from "react-confetti";
 import { FacebookIcon, FacebookShareButton, XIcon, TwitterShareButton} from "react-share";
+import { useScreenshot, createFileName } from "use-react-screenshot";
+import downloadsImage from "./assets/downloads.png";
 
 
 
@@ -161,6 +163,21 @@ function Results() {
     return "";
   };
 
+  const ref = createRef(null);
+  const [image, takeScreenShot] = useScreenshot({
+    type: "image/jpeg",
+    quality: 1.0,
+  });
+
+  const download = (image, { name = "Quizvia Score", extension = "jpg" } = {}) => {
+    const a = document.createElement("a");
+    a.href = image;
+    a.download = createFileName(extension, name);
+    a.click();
+  };
+
+  const downloadScreenshot = () => takeScreenShot(ref.current).then(download);
+
 
 
   return (
@@ -193,8 +210,11 @@ function Results() {
         ))}
       </div> */}
 
-      <div className="flex flex-col items-center gap-8 w-full h-auto m-10">
-        <div className="flex flex-col items-center gap-2 w-full">
+      <div className="flex flex-col items-center gap-2 w-full h-auto m-6 lg:m-10 xs:m-2">
+        <div
+          className="flex flex-col items-center gap-2 w-full py-4 bg-[#00403d]"
+          ref={ref}
+        >
           <span className="text-2xl md:text-4xl font-bold text-custom-gray ">
             Your Score <span className="text-[#ff9209]">{name}</span> is:
           </span>
@@ -204,11 +224,9 @@ function Results() {
           <span className="text-xl md:text-3xl font-bold text-custom-gray text-center px-4 lg:pt-10 pt-4 ">
             {scorePercentage >= passingPercentage
               ? "Congratulations! You reached the passing score.  🎉👏🥳🎉"
-              : "You did not reach the passing score. Better luck next time! 🥚😔"}
+              : "You did not reach the passing score. Better luck next time! 😔"}
           </span>
-        </div>
-        <div className="flex flex-col items-center gap-2 w-full lg:pt-14">
-          <span className="flex justify-center w-full text-LG md:text-2xl font-bold text-custom-gray">
+          <span className="flex justify-center w-full text-LG md:text-2xl font-bold text-custom-gray pt-2 md:pt-4 lg:pt-10">
             Your Quiz Settings:
           </span>
           <div className="flex flex-col w-full text-sm lg:text-md lg:flex-row lg:flex-wrap gap-2 lg:justify-center px-8 md:px-32 text-center">
@@ -239,8 +257,9 @@ function Results() {
               </span>
             </div>
           </div>
-
-          <div className="flex flex-col md:flex-row items-center gap-2 w-full md:pt-6 lg:pt-14 pt-2 px-8 justify-center">
+        </div>
+        <div className="flex flex-col items-center gap-2 w-full ">
+          <div className="flex flex-col md:flex-row items-center gap-2 w-full md:pt-0 lg:pt-6 px-8 justify-center">
             <button
               className="bg-[#ffd099] md:w-[30%] w-full text-[#00403d] rounded-md p-2 md:p-2 font-bold text-lg md:text-xl hover:bg-[#e79209] ease-in-out duration-300"
               onClick={() => {
@@ -266,7 +285,7 @@ function Results() {
             >
               <div className="flex absolute lg:ml-10 ">
                 <h1 className="text-xl md:text-4xl font-bold text-[#0a5a62]">
-                  Review Your Answers
+                  Review your Answers
                 </h1>
               </div>
               <div className="flex sticky top-0 items-end justify-end mb-4 md:mb-8">
@@ -367,7 +386,7 @@ function Results() {
             </Modal>
           </div>
 
-          <div className="flex flex-col items-center gap-2 w-full lg:pt-6 md:pt-0 sm:pt-4 xs:pt-1">
+          <div className="flex flex-col items-center gap-2 w-full lg:pt-14 md:pt-0 pt-4 xs:pt-2">
             <h1 className="text-md md:text-xl text-custom-gray font-semibold">
               Share:
             </h1>
@@ -375,9 +394,19 @@ function Results() {
               <FacebookShareButton url={shareUrl} hashtag={description()}>
                 <FacebookIcon className="rounded-md" size={36} round={false} />
               </FacebookShareButton>
-              <TwitterShareButton url={shareUrl} title={description()} hashtags={["Quizvia"]}>
+              <TwitterShareButton
+                url={shareUrl}
+                title={description()}
+                hashtags={["Quizvia"]}
+              >
                 <XIcon size={36} className="rounded-md" round={false} />
               </TwitterShareButton>
+              <button
+                className="size-9 rounded-md bg-[#14b1c0]"
+                onClick={downloadScreenshot}
+              >
+                <img className="p-2" src={downloadsImage} alt="screenshot" />
+              </button>
             </div>
           </div>
         </div>
@@ -390,13 +419,19 @@ function Results() {
               Follow me: @jltdev
             </span>
             <div className="flex flex-row gap-4">
-              <a href="">
+              <a
+                href="https://www.facebook.com/johnloydtalagtag16"
+                target="_blank"
+              >
                 <FaFacebook className="md:size-8 size-6 text-custom-gray" />
               </a>
-              <a href="">
-                <FaFacebookMessenger className="md:size-8 size-6 text-custom-gray" />
+              <a href="https://www.linkedin.com/in/jon-loyd-t-talagtag-00398227a/">
+                <FaLinkedin
+                  className="md:size-8 size-6 text-custom-gray"
+                  target="_blank"
+                />
               </a>
-              <a href="">
+              <a href="https://github.com/Loydie16" target="_blank">
                 <FaGithub className="md:size-8 size-6 text-custom-gray" />
               </a>
             </div>

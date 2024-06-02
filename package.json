@@ -16,8 +16,10 @@
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "axios": "^1.7.2",
+    "html2canvas": "^1.4.1",
+    "lottie-react": "^2.4.0",
     "prop-types": "^15.8.1",
-    "react": "^18.2.0",
+    "react": "^18.3.1",
     "react-confetti": "^6.1.0",
     "react-countdown-circle-timer": "^3.2.1",
     "react-dom": "^18.2.0",
@@ -27,7 +29,8 @@
     "react-modal": "^3.16.1",
     "react-router-dom": "^6.23.1",
     "react-share": "^5.1.0",
-    "react-use": "^17.5.0"
+    "react-use": "^17.5.0",
+    "use-react-screenshot": "^4.0.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.66",

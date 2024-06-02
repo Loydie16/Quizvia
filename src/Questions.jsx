@@ -15,7 +15,6 @@ function decodeHtml(html) {
 }
 
 function Questions() {
-  
   const navigate = useNavigate();
 
   //const [questions, setQuestions] = useState([]);
@@ -34,11 +33,9 @@ function Questions() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0); // State for current question index
 
   window.onpopstate = () => {
-    navigate("/results");
+    navigate("/");
+    window.location.reload();
   };
-
-
-
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
@@ -97,9 +94,26 @@ function Questions() {
   };
 
   const handleSubmit = () => {
-    // Handle form submission and user choices
-    console.log("User Choices:", userChoices);
-    navigate("/results");
+    // Check if the user has selected an answer for the current question
+    if (userChoices[currentQuestionIndex] !== undefined) {
+      console.log("User Choices:", userChoices);
+      navigate("/results");
+    } else {
+      // Optionally, you can provide feedback to the user indicating that they need to select an answer.
+      toast("Choose an answer before proceeding.", {
+        icon: "⚠️",
+        style: {
+          border: "1px solid #e79209",
+          color: "#e79209",
+        },
+
+        iconTheme: {
+          primary: "#e79209",
+          secondary: "#FFFAEE",
+        },
+        duration: 3000,
+      });
+    }
   };
 
   const handleNextQuestion = () => {
@@ -136,7 +150,25 @@ function Questions() {
 
   return (
     <div className="flex flex-col justify-center h-screen bg-[#00403d]">
-      {responseCode !== 0 ? (
+      {responseCode === 1 ? (
+        <div className="flex flex-col justify-center items-center gap-6 text-center m-2">
+          <h1 className="text-4xl font-bold text-white">
+            Error: The API response is failed.
+          </h1>
+          <p className="text-white text-lg">
+            Please adjust your quiz settings and try again.
+          </p>
+          <button
+            className="bg-[#0a5a62] font-semibold text-white px-4 py-2 rounded-md hover:bg-[#e79209] ease-in-out duration-500"
+            onClick={() => {
+              navigate("/");
+              window.location.reload();
+            }}
+          >
+            Go Back
+          </button>
+        </div>
+      ) : responseCode !== 0 ? (
         <div className="flex flex-col justify-center items-center pt-20 gap-6 text-center mx-4">
           <h1 className="text-4xl font-bold text-white">Loading...</h1>
           <h1 className="sm:text-xl text-lg font-semibold text-white">

@@ -1,15 +1,21 @@
-import { FaFacebook, FaFacebookMessenger, FaGithub } from "react-icons/fa6";
+import { FaFacebook, FaLinkedin, FaGithub } from "react-icons/fa6";
 import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import QuizContext from "./QuizContext";
 
 function HomePage() {
   const [name, setName] = useState("");
-  const { numQuestions, setNumQuestions, difficulty, setDifficulty, category, setCategory, type, setType } =
-    useContext(QuizContext);
+  const {
+    numQuestions,
+    setNumQuestions,
+    difficulty,
+    setDifficulty,
+    category,
+    setCategory,
+    type,
+    setType,
+  } = useContext(QuizContext);
   const navigate = useNavigate();
-
-
 
   useEffect(() => {
     const storedName = localStorage.getItem("name");
@@ -30,8 +36,6 @@ function HomePage() {
       },
     }); // Navigate to the questions page with state
   };
-
-    
 
   return (
     <>
@@ -57,13 +61,19 @@ function HomePage() {
                 Follow me: @jltdev
               </span>
               <div className="flex flex-row gap-4">
-                <a href="">
+                <a
+                  href="https://www.facebook.com/johnloydtalagtag16"
+                  target="_blank"
+                >
                   <FaFacebook className="size-8 text-custom-gray" />
                 </a>
-                <a href="">
-                  <FaFacebookMessenger className="size-8 text-custom-gray" />
+                <a
+                  href="https://www.linkedin.com/in/jon-loyd-t-talagtag-00398227a/"
+                  target="_blank"
+                >
+                  <FaLinkedin className="size-8 text-custom-gray" />
                 </a>
-                <a href="">
+                <a href="https://github.com/Loydie16" target="_blank">
                   <FaGithub className="size-8 text-custom-gray" />
                 </a>
               </div>
