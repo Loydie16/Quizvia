@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useEffect, useState, useContext } from "react";
 import { CountdownCircleTimer } from "react-countdown-circle-timer";
-
 import toast from "react-hot-toast";
 import QuizContext from "./QuizContext";
+import PageError from "./pageError";
 
 // Function to decode HTML entities
 function decodeHtml(html) {
@@ -30,14 +30,15 @@ function Questions() {
     type,
   } = useContext(QuizContext);
   //const [userChoices, setUserChoices] = useState({}); // State for user choices
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0); // State for current question index
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [isError, setIsError] = useState(false);
 
   window.onpopstate = () => {
     navigate("/");
     window.location.reload();
   };
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  //eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     if (!numQuestions || !difficulty || !category || !type) {
       navigate("/");
@@ -54,7 +55,6 @@ function Questions() {
       await axios
         .get(`https://opentdb.com/api.php`, { params })
         .then((response) => {
-          // Decode HTML entities in questions and answers
           const decodedQuestions = response.data.results.map((question) => ({
             ...question,
             question: decodeHtml(question.question),
@@ -68,10 +68,10 @@ function Questions() {
           setQuestions(decodedQuestions);
           setResponse(response.data.response_code);
         })
-        .catch((error) => {
-          console.error("Error fetching questions:", error);
+        .catch(() => {
+            setIsError(true);
         });
-    };
+      };
 
     fetchQuestions(numQuestions, difficulty, category, type);
   }, [numQuestions, difficulty, category, type, setQuestions, navigate]);
@@ -85,26 +85,23 @@ function Questions() {
 
   const handleNextQuestionOrSubmit = () => {
     if (currentQuestionIndex === questions.length - 1) {
-      // If it's the last question, submit the form
       handleSubmit();
     } else {
-      // If it's not the last question, proceed to the next question
       handleNextQuestion();
     }
   };
 
   const handleSubmit = () => {
-    // Check if the user has selected an answer for the current question
     if (userChoices[currentQuestionIndex] !== undefined) {
       console.log("User Choices:", userChoices);
       navigate("/results");
     } else {
-      // Optionally, you can provide feedback to the user indicating that they need to select an answer.
       toast("Choose an answer before proceeding.", {
         icon: "⚠️",
         style: {
           border: "1px solid #e79209",
           color: "#e79209",
+          fontWeight: "500",
         },
 
         iconTheme: {
@@ -117,18 +114,17 @@ function Questions() {
   };
 
   const handleNextQuestion = () => {
-    // Check if the user has selected an answer for the current question
     if (userChoices[currentQuestionIndex] !== undefined) {
       if (currentQuestionIndex < questions.length - 1) {
         setCurrentQuestionIndex(currentQuestionIndex + 1);
       }
     } else {
-      // Optionally, you can provide feedback to the user indicating that they need to select an answer.
       toast("Choose an answer before proceeding.", {
         icon: "⚠️",
         style: {
           border: "1px solid #e79209",
           color: "#e79209",
+          fontWeight: "500",
         },
 
         iconTheme: {
@@ -145,6 +141,48 @@ function Questions() {
       setCurrentQuestionIndex(currentQuestionIndex - 1);
     }
   };
+
+  const calculateDuration = (difficulty, numQuestions) => {
+    switch (difficulty) {
+      case "easy":
+        return 15 * numQuestions;
+      case "medium":
+        return 20 * numQuestions;
+      case "hard":
+        return 25 * numQuestions;
+      default:
+        return 20 * numQuestions;
+    }
+  };
+
+  const duration = calculateDuration(difficulty, numQuestions);
+
+  const children = ({ remainingTime }) => {
+    const minutes = Math.floor(remainingTime / 60);
+    const seconds = String(remainingTime % 60).padStart(2, "0");
+    
+    return `${minutes}:${seconds}`;
+  };
+
+  const showToast = (remainingTime) => {
+    toast(`Remaining time is ${remainingTime} seconds.`, {
+      icon: "⚠️",
+      style: {
+        border: "1px solid #e79209",
+        color: "#e79209",
+        fontWeight: "500",
+      },
+      iconTheme: {
+        primary: "#e79209",
+        secondary: "#FFFAEE",
+      },
+      duration: 5000,
+    });
+};
+
+  if (isError) {
+    return <PageError />; // Render Error component if there's an error
+  }
 
   console.log(responseCode);
 
@@ -203,7 +241,7 @@ function Questions() {
         </div>
       ) : (
         <div className="flex flex-col justify-center lg:w-7/12 w-11/12 h-5/6 mx-auto bg-white rounded-md">
-          <div className="flex flex-row justify-between p-4 md:p-10 w-full h-1/5 border-b-2 border-[#00403d]">
+          <div className="flex flex-row justify-between xs:p-2 p-4 md:p-10 w-full h-1/5 border-b-2 border-[#00403d]">
             <div className="flex flex-col justify-center items-start xl:gap-2">
               <h1 className="font-bold text-[#00403d] sm:text-xl text-md">
                 Type:{" "}
@@ -231,22 +269,69 @@ function Questions() {
               </h1>
             </div>
             <div></div>
-            <div className="flex justify-center items-center gap-4">
-              <h1 className="hidden md:block font-bold text-[#00403d]">
+            <div className="flex justify-center items-center">
+              <h1 className="hidden md:block font-bold text-[#00403d] pr-4 text-xl">
                 Remaining Time:
               </h1>
               <CountdownCircleTimer
                 isPlaying
-                duration={10}
-                colors={["#00403d", "#F7B801", "#A30000", "#A30000"]}
-                colorsTime={[7, 5, 2, 0]}
-                size={70}
+                duration={duration}
+                colors={["#00403d", "#F7B801", "#ff5659", "#fe0606", "#A30000"]}
+                colorsTime={[
+                  duration / 2,
+                  duration / 3,
+                  duration / 4,
+                  duration / 5,
+                  0,
+                ]}
+                size={80}
+                onUpdate={(remainingTime) => {
+                  if (remainingTime === duration / 2) {
+                    showToast(remainingTime);
+                  } else if (remainingTime === duration / 3) {
+                    showToast(remainingTime);
+                  } else if (remainingTime === duration / 4) {
+                    showToast(remainingTime);
+                  } else if (remainingTime === duration / 5) {
+                    showToast(remainingTime);
+                  } else if (remainingTime === 10) {
+                    toast("You have 10 seconds remaining!", {
+                      icon: "⚠️",
+                      style: {
+                        border: "1px solid #ec1f3f",
+                        color: "#ec1f3f",
+                        fontWeight: "500",
+                      },
 
-                //onComplete={() => {
-                //console.log("complete");
-                //}}
+                      iconTheme: {
+                        primary: "#ec1f3f",
+                        secondary: "#FFFAEE",
+                      },
+                      duration: 5000,
+                    });
+                  } else if (remainingTime === 0) {
+                    toast("You ran out of time!", {
+                      icon: "😔",
+                      style: {
+                        border: "1px solid #ec1f3f",
+                        color: "#ec1f3f",
+                        fontWeight: "500",
+                      },
+
+                      iconTheme: {
+                        primary: "#ec1f3f",
+                        secondary: "#FFFAEE",
+                      },
+                      duration: 5000,
+                    });
+                  }
+                }}
+
+                onComplete={() => {
+                  navigate("/results");
+                }}
               >
-                {({ remainingTime }) => remainingTime}
+                {children}
               </CountdownCircleTimer>
             </div>
           </div>

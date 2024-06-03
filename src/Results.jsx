@@ -8,8 +8,6 @@ import { FacebookIcon, FacebookShareButton, XIcon, TwitterShareButton} from "rea
 import { useScreenshot, createFileName } from "use-react-screenshot";
 import downloadsImage from "./assets/downloads.png";
 
-
-
 function Results() {
   const { questions, userChoices, numQuestions, difficulty, category, type } =
     useContext(QuizContext);
@@ -48,10 +46,6 @@ function Results() {
     setOpenModal(false);
   };
 
-  /* window.onpopstate = () => {
-    navigate("/");
-  }; */
-
   const score = Object.keys(userChoices).reduce((score, key) => {
     const question = questions[key];
     if (question.correct_answer === userChoices[key]) {
@@ -60,8 +54,6 @@ function Results() {
     return score;
   }, 0);
 
-
-  // Calculate passing percentage
   const passingPercentage = 60;
   const scorePercentage = (score / questions.length) * 100;
 
@@ -89,8 +81,6 @@ function Results() {
     scorePercentage,
   ]);
 
-  // Calculate the user's score
-  
   const customStyles = {
     content: {
       top: "50%",
@@ -112,8 +102,6 @@ function Results() {
       backgroundColor: "rgba(255, 255, 255, 0.30)",
     },
   };
-
-  
 
   const categoryNames = {
     9: "General Knowledge",
@@ -178,8 +166,6 @@ function Results() {
 
   const downloadScreenshot = () => takeScreenShot(ref.current).then(download);
 
-
-
   return (
     <main className="flex flex-col bg-[#00403d] w-full min-h-screen items-center">
       {showConfetti && (
@@ -190,26 +176,6 @@ function Results() {
           tweenDuration={10000}
         />
       )}
-      {/* <h1>
-        Your Score: {score} / {questions.length}
-      </h1>
-      <div className="results-details">
-        {questions.map((question, index) => (
-          <div key={index} className="question-result">
-            <h2>{question.question}</h2>
-            <p>
-              Your answer: {userChoices[index]} <br />
-              Correct answer: {question.correct_answer}
-            </p>
-            {userChoices[index] === question.correct_answer ? (
-              <p style={{ color: "green" }}>Correct</p>
-            ) : (
-              <p style={{ color: "red" }}>Wrong</p>
-            )}
-          </div>
-        ))}
-      </div> */}
-
       <div className="flex flex-col items-center gap-2 w-full h-auto m-6 lg:m-10 xs:m-2">
         <div
           className="flex flex-col items-center gap-2 w-full py-4 bg-[#00403d]"

@@ -25,7 +25,7 @@ function HomePage() {
   }, []);
 
   const handleSubmit = (e) => {
-    e.preventDefault(); // Prevent the default form submission
+    e.preventDefault(); 
     localStorage.setItem("name", name);
     navigate("/questions", {
       state: {
@@ -34,7 +34,7 @@ function HomePage() {
         category,
         type,
       },
-    }); // Navigate to the questions page with state
+    });
   };
 
   return (
