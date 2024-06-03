@@ -89,7 +89,7 @@ function HomePage() {
           </div>
         </div>
 
-        <div className="flex flex-col justify-center size-full bg-[#00403d] p-5  md:p-20">
+        <div className="flex flex-col justify-center size-full bg-[#00403d] p-5  md:p-20 flex-grow">
           <form onSubmit={handleSubmit}>
             <div className="flex flex-col gap-4 md:gap-6 lg:gap-8 place-content-center">
               <span className="font-bold 2xl:text-6xl md:text-4xl text-3xl text-custom-gray">
@@ -110,7 +110,7 @@ function HomePage() {
                 />
               </div>
 
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-2">
                 <span className="font-bold text-xl lg:text-2xl text-custom-gray">
                   Quiz Settings:
                 </span>

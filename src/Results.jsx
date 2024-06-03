@@ -176,12 +176,12 @@ function Results() {
           tweenDuration={10000}
         />
       )}
-      <div className="flex flex-col items-center gap-2 w-full h-auto m-6 lg:m-10 xs:m-2">
+      <div className="flex flex-col items-center gap-2 w-full h-auto m-6 lg:m-10 xs:m-2 flex-grow">
         <div
           className="flex flex-col items-center gap-2 w-full py-4 bg-[#00403d]"
           ref={ref}
         >
-          <span className="text-2xl md:text-4xl font-bold text-custom-gray ">
+          <span className="text-2xl md:text-4xl font-bold text-custom-gray text-center">
             Your Score <span className="text-[#ff9209]">{name}</span> is:
           </span>
           <span className="text-6xl md:text-7xl font-bold text-[#ff9209]">
@@ -378,8 +378,8 @@ function Results() {
         </div>
       </div>
 
-      <div className="fixed bottom-0 w-full h-[14%] md:h-1/6 bg-[#0a5a62] ">
-        <div className="flex items-center flex-col md:flex-row  justify-between w-full h-full p-3 md:px-20">
+      <div className="flex w-full h-[14%] md:h-1/6 bg-[#0a5a62]">
+        <div className="flex items-center flex-col md:flex-row  justify-between w-full h-full p-3 md:px-20 gap-4">
           <div className="flex flex-col items-center justify-center gap-2">
             <span className="text-md md:text-xl font-bold text-custom-gray">
               Follow me: @jltdev

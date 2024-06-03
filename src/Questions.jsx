@@ -64,7 +64,7 @@ function Questions() {
             ),
             category: decodeHtml(question.category),
           }));
-          console.log(response.data);
+          //console.log(response.data);
           setQuestions(decodedQuestions);
           setResponse(response.data.response_code);
         })
@@ -93,7 +93,7 @@ function Questions() {
 
   const handleSubmit = () => {
     if (userChoices[currentQuestionIndex] !== undefined) {
-      console.log("User Choices:", userChoices);
+      //console.log("User Choices:", userChoices);
       navigate("/results");
     } else {
       toast("Choose an answer before proceeding.", {
@@ -184,7 +184,7 @@ function Questions() {
     return <PageError />; // Render Error component if there's an error
   }
 
-  console.log(responseCode);
+  //console.log(responseCode);
 
   return (
     <div className="flex flex-col justify-center h-screen bg-[#00403d]">
