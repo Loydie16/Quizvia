@@ -2,6 +2,8 @@ import { FaFacebook, FaLinkedin, FaGithub } from "react-icons/fa6";
 import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import QuizContext from "./QuizContext";
+import heroImg from "./assets/hero-img.png";
+import logo from "./assets/quizvia-high-resolution-logo-transparent.png";
 
 function HomePage() {
   const [name, setName] = useState("");
@@ -44,15 +46,15 @@ function HomePage() {
           <div className="w-full h-40 ">
             <img
               className="w-80 h-40 p-6 ml-4  "
-              src="../src/assets/quizvia-high-resolution-logo-transparent.png"
-              alt="awdas"
+              src={logo}
+              alt="logo"
             />
           </div>
           <div className="w-full h-[70%]">
             <img
               className="size-full"
-              src="../src/assets/hero-img.png"
-              alt="awdas"
+              src={heroImg}
+              alt="hero-img"
             />
           </div>
           <div className="flex items-center justify-between w-full h-40 px-10 ">

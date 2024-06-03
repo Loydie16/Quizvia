@@ -16,7 +16,7 @@ function Results() {
 
   const [showConfetti, setShowConfetti] = useState(false);
   const [modalIsOpen, setOpenModal] = useState();
-  const shareUrl = "tailwindcss.com";
+  const shareUrl = "https://quizvia.vercel.app/";
   const description = () => {
     if (scorePercentage >= passingPercentage) {
       return (
