@@ -110,7 +110,7 @@ function HomePage() {
                 />
               </div>
 
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2 sm:gap-4">
                 <span className="font-bold text-xl lg:text-2xl text-custom-gray">
                   Quiz Settings:
                 </span>
