@@ -3,8 +3,8 @@ import Lottie from "lottie-react";
 
 function pageError() {
      return (
-       <main className="flex flex-col justify-center gap-8 bg-[#00403d] w-full min-h-screen items-center">
-         <div className="flex flex-col items-center justify-center gap-20">
+       <main className="flex flex-col justify-center  bg-[#00403d] w-full min-h-screen items-center">
+         <div className="flex flex-col items-center justify-center ">
            <span className="font-bold text-4xl sm:text-6xl md:text-8xl lg:text-10xl text-custom-gray text-center">
              Page Respond with an Error
            </span>

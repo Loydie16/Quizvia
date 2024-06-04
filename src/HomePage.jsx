@@ -27,7 +27,7 @@ function HomePage() {
   }, []);
 
   const handleSubmit = (e) => {
-    e.preventDefault(); 
+    e.preventDefault();
     localStorage.setItem("name", name);
     navigate("/questions", {
       state: {
@@ -41,47 +41,42 @@ function HomePage() {
 
   return (
     <>
-      <main className="flex flex-row justify-center items-center w-screen h-screen">
-        <div className="lg:flex hidden size-full bg-[#0a5a62] flex-col">
-          <div className="w-full h-40 ">
-            <img
-              className="w-80 h-40 p-6 ml-4  "
-              src={logo}
-              alt="logo"
-            />
+      <main className="flex flex-col md:flex-row justify-center items-center w-full h-full min-h-screen bg-[#00403d]">
+        <div className="hidden lg:flex flex-col w-full lg:w-1/2 h-full gap-16">
+          <div className="w-full h-32">
+            <img className="max-w-full max-h-full p-6" src={logo} alt="logo" />
           </div>
-          <div className="w-full h-[70%]">
+          <div className="flex-grow flex items-center justify-center">
             <img
-              className="size-full"
+              className="max-w-full max-h-full"
               src={heroImg}
               alt="hero-img"
             />
           </div>
-          <div className="flex items-center justify-between w-full h-40 px-10 ">
+          <div className="flex flex-row items-end pb-4 justify-between w-full h-40 px-10">
             <div className="flex flex-col items-center justify-center gap-2">
               <span className="text-xl font-bold text-custom-gray">
                 Follow me: @jltdev
               </span>
-              <div className="flex flex-row gap-4">
+              <div className="flex gap-4">
                 <a
                   href="https://www.facebook.com/johnloydtalagtag16"
                   target="_blank"
                 >
-                  <FaFacebook className="size-8 text-custom-gray" />
+                  <FaFacebook className="text-2xl text-custom-gray" />
                 </a>
                 <a
                   href="https://www.linkedin.com/in/jon-loyd-t-talagtag-00398227a/"
                   target="_blank"
                 >
-                  <FaLinkedin className="size-8 text-custom-gray" />
+                  <FaLinkedin className="text-2xl text-custom-gray" />
                 </a>
                 <a href="https://github.com/Loydie16" target="_blank">
-                  <FaGithub className="size-8 text-custom-gray" />
+                  <FaGithub className="text-2xl text-custom-gray" />
                 </a>
               </div>
             </div>
-
-            <div className="flex flex-col items-center justify-center">
+            <div className="flex items-center justify-center">
               <span className="font-semibold text-lg text-custom-gray">
                 © 2024 Quizvia. All Rights Reserved.
               </span>
@@ -89,18 +84,18 @@ function HomePage() {
           </div>
         </div>
 
-        <div className="flex flex-col justify-center size-full bg-[#00403d] p-5  md:p-20 flex-grow">
+        <div className="flex flex-col justify-center bg-[#00403d] p-5 flex-grow w-full lg:w-1/2 h-auto">
           <form onSubmit={handleSubmit}>
             <div className="flex flex-col gap-4 md:gap-6 lg:gap-8 place-content-center">
-              <span className="font-bold 2xl:text-6xl md:text-4xl text-3xl text-custom-gray">
+              <span className="font-bold text-3xl md:text-4xl 2xl:text-6xl text-custom-gray">
                 Welcome to Quizvia
               </span>
               <div className="flex flex-col gap-2">
-                <span className="text-md lg:text-xl text-custom-gray font-semibold ">
+                <span className="text-md lg:text-xl text-custom-gray font-semibold">
                   What should we call you?
                 </span>
                 <input
-                  className="border-2 border-white  rounded-md p-1 md:p-2 text-white bg-transparent outline-none font-thin "
+                  className="border-2 border-white rounded-md p-1 md:p-2 text-white bg-transparent outline-none font-thin"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   type="text"
@@ -118,7 +113,7 @@ function HomePage() {
                   Number of Questions:
                 </span>
                 <input
-                  className="border border-slate-400 bg-white rounded-md p-1 px-2 md:p-2 text-black "
+                  className="border border-slate-400 bg-white rounded-md p-1 px-2 md:p-2 text-black"
                   type="number"
                   placeholder="Enter the number of questions. (5-50)"
                   max={50}
@@ -205,7 +200,7 @@ function HomePage() {
 
               <div>
                 <ul className="list-disc list-outside pl-4">
-                  <li className="text-md text-custom-gray xs:text-sm ">
+                  <li className="text-md text-custom-gray xs:text-sm">
                     You can only select 5 up to 50 questions at a time.
                   </li>
                   <li className="text-md text-custom-gray xs:text-sm">
@@ -217,7 +212,7 @@ function HomePage() {
                 </ul>
               </div>
               <button
-                className=" text-white font-semibold text-xl rounded-md p-3 bg-[#006d6a] hover:bg-[#0a5a62] ease-in-out duration-300 transform hover:scale-95 hover:shadow-lg hover:cursor-pointer"
+                className="text-white font-semibold text-xl rounded-md p-3 bg-[#006d6a] hover:bg-[#0a5a62] ease-in-out duration-300 transform hover:scale-95 hover:shadow-lg hover:cursor-pointer"
                 type="submit"
               >
                 Start Quiz
