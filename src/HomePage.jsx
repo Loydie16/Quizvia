@@ -76,11 +76,10 @@ function HomePage() {
                 </a>
               </div>
             </div>
-            <div className="flex items-center justify-center">
-              <span className="font-semibold text-lg text-custom-gray">
-                © 2024 Quizvia. All Rights Reserved.
-              </span>
-            </div>
+
+            <span className="font-semibold text-md text-custom-gray">
+              © 2024 Quizvia. All Rights Reserved.
+            </span>
           </div>
         </div>
 
@@ -198,19 +197,19 @@ function HomePage() {
                 </select>
               </div>
 
-              <div>
-                <ul className="list-disc list-outside pl-4">
+                <ul className="flex flex-col list-disc list-outside pl-4 gap-2">
                   <li className="text-md text-custom-gray xs:text-sm">
                     You can only select 5 up to 50 questions at a time.
                   </li>
                   <li className="text-md text-custom-gray xs:text-sm">
-                    Passing score rate is 60% of the number of questions.
+                    The passing score is 60% of the total number of questions.
                   </li>
                   <li className="text-md text-custom-gray xs:text-sm">
-                    The timer is added 15 seconds per question.
+                    The timer adds 15 seconds per easy question, 20 per medium
+                    or any difficulty, and 25 per hard question.
                   </li>
                 </ul>
-              </div>
+
               <button
                 className="text-white font-semibold text-xl rounded-md p-3 bg-[#006d6a] hover:bg-[#0a5a62] ease-in-out duration-300 transform hover:scale-95 hover:shadow-lg hover:cursor-pointer"
                 type="submit"

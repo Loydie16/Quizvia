@@ -172,7 +172,7 @@ function Results() {
         <Confetti
           className="w-full h-full"
           recycle={false}
-          numberOfPieces={2500}
+          numberOfPieces={200}
           tweenDuration={10000}
         />
       )}
@@ -379,7 +379,7 @@ function Results() {
       </div>
 
       <div className="flex w-full h-[14%] md:h-1/6 bg-[#0a5a62]">
-        <div className="flex items-center flex-col md:flex-row  justify-between w-full h-full p-3 md:px-20 gap-4">
+        <div className="flex items-center flex-col md:flex-row  justify-between w-full h-full p-4 md:p-8 md:px-20 gap-4">
           <div className="flex flex-col items-center justify-center gap-2">
             <span className="text-md md:text-xl font-bold text-custom-gray">
               Follow me: @jltdev

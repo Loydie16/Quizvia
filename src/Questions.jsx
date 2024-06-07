@@ -187,7 +187,7 @@ function Questions() {
   //console.log(responseCode);
 
   return (
-    <div className="flex flex-col justify-center h-screen bg-[#00403d] flex-grow">
+    <div className="flex flex-col justify-center align-center w-full h-full min-h-screen  bg-[#00403d] flex-grow">
       {responseCode === 1 ? (
         <div className="flex flex-col justify-center items-center gap-6 text-center m-2">
           <h1 className="text-4xl font-bold text-white">
@@ -240,7 +240,7 @@ function Questions() {
           </div>
         </div>
       ) : (
-        <div className="flex flex-col justify-center lg:w-7/12 w-11/12 h-[95%] mx-auto bg-white rounded-md">
+        <div className="flex flex-col justify-center lg:w-7/12 w-11/12 mx-auto h-5/6 bg-white rounded-md my-4">
           <div className="flex flex-row justify-between xs:p-2 p-4 md:p-10 w-full h-32 border-b-2 border-[#00403d]">
             <div className="flex flex-col justify-center items-start xl:gap-2">
               <h1 className="font-bold text-[#00403d] sm:text-xl text-md">
@@ -326,7 +326,6 @@ function Questions() {
                     });
                   }
                 }}
-
                 onComplete={() => {
                   navigate("/results");
                 }}
@@ -335,8 +334,8 @@ function Questions() {
               </CountdownCircleTimer>
             </div>
           </div>
-          <div className="flex flex-col justify-start items-center p-4 md:p-8 w-full h-4/5">
-            <h1 className="text-md sm:text-2xl lg:text-2xl md:2xl pb-4  font-bold text-[#00403d] text-center">
+          <div className="flex flex-col justify-start items-center p-8 w-full h-4/5">
+            <h1 className="text-md sm:text-2xl md:text-3xl  pb-8  font-bold text-[#00403d] text-center">
               {questions[currentQuestionIndex].question}
             </h1>
             <form
@@ -365,7 +364,7 @@ function Questions() {
                       required
                     />
                     <label
-                      className="flex justify-center items-center w-full hover:cursor-pointer text-[#00403d] font-semibold"
+                      className="flex justify-center text-sm md:text-lg items-center w-full h-full hover:cursor-pointer text-[#00403d] font-semibold"
                       htmlFor={`true-${currentQuestionIndex}`}
                     >
                       True
@@ -391,7 +390,7 @@ function Questions() {
                       required
                     />
                     <label
-                      className="flex justify-center items-center w-full hover:cursor-pointer text-[#00403d] font-semibold"
+                      className="flex justify-center text-sm md:text-lg items-center w-full h-full hover:cursor-pointer text-[#00403d] font-semibold"
                       htmlFor={`false-${currentQuestionIndex}`}
                     >
                       False
@@ -405,7 +404,7 @@ function Questions() {
                   .map((option, index) => (
                     <div
                       key={index}
-                      className={`flex flex-row w-full gap-4 px-6 h-14 rounded-md ease-in-out duration-300 hover:cursor-pointer hover:bg-green-200 ${
+                      className={`flex flex-row w-full gap-4 p-4 rounded-md ease-in-out duration-300 hover:cursor-pointer hover:bg-green-200 ${
                         userChoices[currentQuestionIndex] === option
                           ? "bg-green-200 border-2 border-green-400"
                           : "bg-gray-200"
@@ -424,7 +423,7 @@ function Questions() {
                         required
                       />
                       <label
-                        className="flex justify-center text-sm md:text-base items-center w-full h-full hover:cursor-pointer text-[#00403d] font-semibold"
+                        className="flex justify-center text-sm md:text-lg items-center w-full h-full hover:cursor-pointer text-[#00403d] font-semibold"
                         htmlFor={`option-${currentQuestionIndex}-${index}`}
                       >
                         {option}
@@ -434,7 +433,7 @@ function Questions() {
               )}
             </form>
           </div>
-          <div className="flex flex-row justify-evenly sm:justify-between items-center mb-6 md:px-10 w-full">
+          <div className="flex flex-row justify-evenly sm:justify-between items-center my-6 sm:px-10 w-full">
             <h1 className="text-sm sm:text-lg md:text-xl font-bold text-[#00403d] text-center">
               Question {currentQuestionIndex + 1} of {numQuestions}
             </h1>
