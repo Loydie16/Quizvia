@@ -1,8 +1,24 @@
-# React + Vite
+# Quizvia
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project was created to practice my React skills. Quizvia is a web-based quiz application that fetches questions and answers from the [Open Trivia Database](https://opentdb.com/).
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Quiz Categories**: Choose from various categories to test your knowledge.
+- **Difficulty Levels**: Select the difficulty level of the questions.
+- **Real-time Scoring**: Track your score as you progress through the quiz.
+- **Responsive Design**: Optimized for both desktop and mobile devices.
+
+- ## Technologies Used
+
+- HTML
+- Tailwind CSS
+- JavaScript (React)
+- Open Trivia Database API
+
+## Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Loydie16/Quizvia.git
+   cd Quizvia
